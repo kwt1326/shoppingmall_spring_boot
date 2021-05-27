@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 @ResponseBody
 @RequestMapping("/ping")
-public class pingController {
+public class PingController {
     @RequestMapping(method=RequestMethod.GET)
     private List<String> pong(Model model) {
         return new ArrayList<String>(Arrays.asList("pong1", "pong2"));

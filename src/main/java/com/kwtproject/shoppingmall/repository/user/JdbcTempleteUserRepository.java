@@ -1,6 +1,6 @@
-package com.kwtproject.shoppingmall.repository;
+package com.kwtproject.shoppingmall.repository.user;
 
-import com.kwtproject.shoppingmall.domain.User;
+import com.kwtproject.shoppingmall.domain.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,8 +8,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class JdbcTempleteUserRepository implements IUserRepository {
     }
 
     @Override
-    public User save(User user) {
+    public UserEntity save(UserEntity user) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
 
@@ -38,31 +36,31 @@ public class JdbcTempleteUserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        List<User> result = jdbcTemplate.query("select * from user where id = ?", userRowMapper(), id);
+    public Optional<UserEntity> findById(Long id) {
+        List<UserEntity> result = jdbcTemplate.query("select * from user where id = ?", userRowMapper(), id);
         return result.stream().findAny();
     }
 
     @Override
-    public Optional<User> findByName(String name) {
-        List<User> result = jdbcTemplate.query("select * from user where name = ?", userRowMapper(), name);
+    public Optional<UserEntity> findByName(String name) {
+        List<UserEntity> result = jdbcTemplate.query("select * from user where name = ?", userRowMapper(), name);
         return result.stream().findAny();
     }
 
     @Override
-    public Optional<User> findByUserName(String username) {
-        List<User> result = jdbcTemplate.query("select * from user where username = ?", userRowMapper(), username);
+    public Optional<UserEntity> findByUserName(String username) {
+        List<UserEntity> result = jdbcTemplate.query("select * from user where username = ?", userRowMapper(), username);
         return result.stream().findAny();
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return jdbcTemplate.query("select * from user", userRowMapper());
     }
 
-    private RowMapper<User> userRowMapper() {
+    private RowMapper<UserEntity> userRowMapper() {
         return (rs, rowNum) -> {
-            User user = User.builder()
+            UserEntity user = UserEntity.builder()
                     .id(rs.getLong("id"))
                     .name(rs.getString("name"))
                     .username(rs.getString("username"))

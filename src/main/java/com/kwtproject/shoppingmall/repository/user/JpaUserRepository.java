@@ -1,6 +1,6 @@
-package com.kwtproject.shoppingmall.repository;
+package com.kwtproject.shoppingmall.repository.user;
 
-import com.kwtproject.shoppingmall.domain.User;
+import com.kwtproject.shoppingmall.domain.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,35 +18,35 @@ public class JpaUserRepository implements IUserRepository {
     }
 
     @Override
-    public User save(User user) {
+    public UserEntity save(UserEntity user) {
         entityManager.persist(user);
         return user;
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        User user = entityManager.find(User.class, id);
+    public Optional<UserEntity> findById(Long id) {
+        UserEntity user = entityManager.find(UserEntity.class, id);
         return Optional.ofNullable(user);
     }
 
     @Override
-    public Optional<User> findByName(String name) {
-        return entityManager.createQuery("select m from User m where m.name = :name", User.class)
+    public Optional<UserEntity> findByName(String name) {
+        return entityManager.createQuery("select m from UserEntity m where m.name = :name", UserEntity.class)
                 .setParameter("name", name)
                 .getResultList()
                 .stream().findAny();
     }
 
     @Override
-    public Optional<User> findByUserName(String name) {
-        return entityManager.createQuery("select m from User m where m.username = :username", User.class)
+    public Optional<UserEntity> findByUserName(String name) {
+        return entityManager.createQuery("select m from UserEntity m where m.username = :username", UserEntity.class)
                 .setParameter("username", name)
                 .getResultList()
                 .stream().findAny();
     }
 
     @Override
-    public List<User> findAll() {
-        return entityManager.createQuery("select m from User m", User.class).getResultList();
+    public List<UserEntity> findAll() {
+        return entityManager.createQuery("select m from UserEntity m", UserEntity.class).getResultList();
     }
 }

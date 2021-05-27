@@ -10,7 +10,8 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Builder
-public class User {
+@Table(name = "user")
+public class UserEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -25,4 +26,7 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = true)
+    private String role;
 }

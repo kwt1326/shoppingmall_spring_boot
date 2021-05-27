@@ -6,6 +6,9 @@ import com.kwtproject.shoppingmall.utils.authentication.object.JwtTokenObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
@@ -15,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RestAuthenticationEntryFilter extends AbstractAuthenticationProcessingFilter {
-    public RestAuthenticationEntryFilter() {
-        super("/**");
+    public RestAuthenticationEntryFilter(RequestMatcher requestMatcher) {
+        super(requestMatcher);
     }
 
     @Override

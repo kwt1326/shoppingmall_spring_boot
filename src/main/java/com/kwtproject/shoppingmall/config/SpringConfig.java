@@ -1,10 +1,7 @@
 package com.kwtproject.shoppingmall.config;
 
-import com.kwtproject.shoppingmall.repository.IUserRepository;
-import com.kwtproject.shoppingmall.repository.JdbcTempleteUserRepository;
-import com.kwtproject.shoppingmall.repository.JpaUserRepository;
-import com.kwtproject.shoppingmall.repository.UserRepository;
-import com.kwtproject.shoppingmall.service.UserService;
+import com.kwtproject.shoppingmall.repository.user.IUserRepository;
+import com.kwtproject.shoppingmall.repository.user.JpaUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +28,4 @@ public class SpringConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5500");
     }
-
-    /* @Repository @Service 가 없을때 직접 @Bean 으로 등록이 가능하다. */
-//    @Bean
-//    public UserService userService() { return new UserService(userRepository()); }
-//
-//    @Bean
-//    public IUserRepository userRepository() {
-//        return new JpaUserRepository(em);
-//    }
 }
