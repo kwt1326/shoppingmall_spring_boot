@@ -1,6 +1,13 @@
 server:
   port: 8090
 
+custom:
+  version:
+    api: v1
+  jwt:
+    secret: kwtprojectshoppingmallsecurekeyab348c83f98642fa13b36535258c8e37ef2c0dd3fd607751d18dc4a9f75a81ff
+    expireHour: 2
+
 spring:
 #  h2:
 #    console:
@@ -16,18 +23,14 @@ spring:
     username: root
     password: 1234
     sql-script-encoding: UTF-8
-  jpa:
+  jpa: # data-jpa config
     show-sql: true
     generate-ddl: true
-    # generate-ddl: false
     hibernate:
       ddl-auto: update # develop, not use production JPA 로 개발용으로 사용할때 쓰임, 배포시 schema.sql 로 쿼리 옮겨서 사용
       # ddl-auto: validate ### staging & production, not use production
   batch:
     initialize-schema: always
-  jwt:
-    secret: kwtjwtsecurekey
-    expireHour: 2
 security:
   basic:
     enabled: false

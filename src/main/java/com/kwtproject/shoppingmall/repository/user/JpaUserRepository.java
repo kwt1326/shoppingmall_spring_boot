@@ -38,9 +38,9 @@ public class JpaUserRepository implements IUserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findByUserName(String name) {
+    public Optional<UserEntity> findByUserName(String username) {
         return entityManager.createQuery("select m from UserEntity m where m.username = :username", UserEntity.class)
-                .setParameter("username", name)
+                .setParameter("username", username)
                 .getResultList()
                 .stream().findAny();
     }

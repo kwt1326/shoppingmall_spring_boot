@@ -60,13 +60,12 @@ public class JdbcTempleteUserRepository implements IUserRepository {
 
     private RowMapper<UserEntity> userRowMapper() {
         return (rs, rowNum) -> {
-            UserEntity user = UserEntity.builder()
-                    .id(rs.getLong("id"))
-                    .name(rs.getString("name"))
-                    .username(rs.getString("username"))
-                    .password(rs.getString("password"))
-                    .email(rs.getString("email"))
-                    .build();
+            UserEntity user = new UserEntity();
+                    user.setId(rs.getLong("id"));
+                    user.setName(rs.getString("name"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setEmail(rs.getString("email"));
             return user;
         };
 //        return new RowMapper<User>() { /* 람다로 축 가능 */

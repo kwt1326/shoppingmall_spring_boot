@@ -1,34 +1,37 @@
 package com.kwtproject.shoppingmall.config;
 
+import com.kwtproject.shoppingmall.security.CustomAccessDeniedHandler;
 import com.kwtproject.shoppingmall.service.UserService;
-import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationRequestFilter;
-import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationEntryFilter;
-import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationEntryPoint;
+import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationJwtFilter;
+import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthorizationJwtFilter;
+import com.kwtproject.shoppingmall.utils.common.ConfigurationPropertiesProvider;
 
-import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private RestAuthenticationRequestFilter restAuthenticationRequestFilter;
 
-    @Autowired
-    private UserService userService;
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
+                "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html", "/webjars/**", "/swagger/**");
+
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception
@@ -37,45 +40,40 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                     .csrf().disable() /** csrf 사용 비활성화 - REST API 방식에 어긋남 */
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                    .formLogin().disable() /** 기본 spring 로그인 창 비활성화 */
                     .authorizeRequests() /** HttpServletRequest 사용하는 요청들의 접근 제한을 건다. */
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    .antMatchers("/user/**").permitAll()
-                    .antMatchers("/ping").permitAll()
+                    .antMatchers("/public/**").permitAll()
+                    .antMatchers("/user/auth/**").permitAll()
                     .anyRequest().authenticated() /** 나머지 요청 모두 활성화 */
-//                .and()
-//                    .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()) /** 비인가 접근 진 */
                 .and()
-                    .formLogin().disable(); /** 기본 spring 로그인 창 비활성화 */
+                    .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+                .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(restAuthenticationRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    // 필터로 인해 permitAll 이 작동하지 않음
-//    @Bean
-//    public RestAuthenticationEntryFilter restAuthenticationEntryFilter() throws Exception {
-//        RestAuthenticationEntryFilter restAuthenticationEntryFilter = new RestAuthenticationEntryFilter(
-//                new AntPathRequestMatcher("/user/**", HttpMethod.POST.name())
-//        );
-//        restAuthenticationEntryFilter.setAuthenticationManager(this.authenticationManager());
-//        restAuthenticationEntryFilter.setAuthenticationSuccessHandler(new RestAuthenticationSuccessHandler());
-//        return restAuthenticationEntryFilter;
-//    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        http.addFilter(new RestAuthenticationJwtFilter(authenticationManager(), configurationPropertiesProvider()));
+        http.addFilter(new RestAuthorizationJwtFilter(authenticationManager(), configurationPropertiesProvider()));
     }
 
     @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailService())
+                .passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public PasswordEncoder encoder() {
+    public ConfigurationPropertiesProvider configurationPropertiesProvider() { return new ConfigurationPropertiesProvider(); }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() { return new CustomAccessDeniedHandler(); }
+
+    @Bean
+    public UserDetailsService userDetailService() {
+        return new UserService();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
