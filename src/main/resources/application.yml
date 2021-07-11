@@ -1,13 +1,39 @@
 server:
   port: 8090
 
+custom:
+  version:
+    api: v1
+  jwt:
+    secret: kwtprojectshoppingmallsecurekeyab348c83f98642fa13b36535258c8e37ef2c0dd3fd607751d18dc4a9f75a81ff
+    expireHour: 2
+
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /localh2db
+#  h2:
+#    console:
+#      enabled: true
+#      path: /localh2db
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:h2:file:~/kwtworkspace/localDB/localh2db;MODE=MySQL;AUTO_SERVER=TRUE
+    # h2 Setting
+    # driver-class-name: org.h2.Driver # com.mysql.jdbc.Driver
+    # url: jdbc:h2:file:~/kwtworkspace/localDB/localh2db;MODE=MySQL;AUTO_SERVER=TRUE
+    # MySql Setting
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shoppingmall?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: 1234
+    sql-script-encoding: UTF-8
+  jpa: # data-jpa config
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update # develop, not use production JPA 로 개발용으로 사용할때 쓰임, 배포시 schema.sql 로 쿼리 옮겨서 사용
+      # ddl-auto: validate ### staging & production, not use production
+  batch:
+    initialize-schema: always
+security:
+  basic:
+    enabled: false
+#mybatis:
+#  type-aliases-package: com.example.myproject.mapper
+#  mapper-locations: mybatis/mapper/**/*.xml
