@@ -53,9 +53,10 @@ public class UserControllerTest {
     public void signUp() throws Exception {
         final RequestSignUp signUpObj = RequestSignUp.builder()
                 .username("testuser")
-                .password("1234")
+                .password("qwer1234!")
                 .email("kwt1326@naver.com")
                 .name("kimwontae")
+                .contact("01012345678")
                 .build();
 
         ResultActions actions = mvc.perform(MockMvcRequestBuilders

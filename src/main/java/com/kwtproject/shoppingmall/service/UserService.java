@@ -55,6 +55,7 @@ public class UserService implements IUserService { // common + security service
             user.setName(requestSignUp.getName());
             user.setPassword(new BCryptPasswordEncoder().encode(requestSignUp.getPassword()));
             user.setUsername(requestSignUp.getUsername());
+            user.setUserContact(requestSignUp.getContact());
             user.setEmail(requestSignUp.getEmail());
             user.setRole("USER_COMMON");
 
