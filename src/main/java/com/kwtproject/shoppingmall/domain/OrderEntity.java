@@ -3,12 +3,13 @@ package com.kwtproject.shoppingmall.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderEntity extends EntityBase {
+
+//    private String token;
 
     private String state;
 
