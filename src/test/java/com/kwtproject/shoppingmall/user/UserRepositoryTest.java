@@ -23,13 +23,12 @@ public class UserRepositoryTest {
 
     @Test
     public void save() {
-        UserEntity user = UserEntity.builder()
-                .username("tester")
-                .name("wontae Kim")
-                .password("1234")
-                .email("email@naver.com")
-                .role("")
-                .build();
+        UserEntity user = new UserEntity();
+        user.setUsername("tester");
+        user.setName("wontae Kim");
+        user.setPassword("1234");
+        user.setEmail("email@naver.com");
+        user.setRole("");
 
         repository.save(user);
 
