@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "order_item")
-public class OrderItemEntity extends EntityBase {
+@Table(name = "cart_item")
+public class CartItemEntity extends EntityBase {
 
     // 계산된 최종 가격 ( discount & quantity )
     private int price;
@@ -23,6 +23,6 @@ public class OrderItemEntity extends EntityBase {
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_order_id")
-    private OrderEntity order;
+    @JoinColumn(name = "cart_id")
+    private CartEntity cart;
 }
