@@ -26,11 +26,10 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.security.test.web.servlet.
         setup.SecurityMockMvcConfigurers.springSecurity;
 
-@RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = "spring.config.location=" + "classpath:/application.yml"
+        properties = "spring.config.location=" + "classpath:/application-test.yml"
 )
 @Transactional
 public class UserControllerTest {
