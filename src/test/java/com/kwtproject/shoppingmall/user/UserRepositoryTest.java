@@ -26,7 +26,8 @@ public class UserRepositoryTest {
         UserEntity user = new UserEntity();
         user.setUsername("tester");
         user.setName("wontae Kim");
-        user.setPassword("1234");
+        user.setPassword("qwer1234!");
+        user.setUserContact("01012345678");
         user.setEmail("email@naver.com");
         user.setRole("");
 
