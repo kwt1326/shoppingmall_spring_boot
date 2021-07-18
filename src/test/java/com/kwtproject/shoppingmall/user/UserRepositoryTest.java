@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=" + "classpath:/application.yml")
 @Transactional
 public class UserRepositoryTest {
 
