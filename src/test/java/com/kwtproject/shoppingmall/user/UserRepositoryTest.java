@@ -8,10 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import javax.transaction.Transactional;
 
-@SpringBootTest(properties = "spring.config.location=" + "classpath:/application-test.yml")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@TestPropertySource(properties = "spring.config.location=" + "classpath:application.yml")
 @Transactional
 public class UserRepositoryTest {
 
