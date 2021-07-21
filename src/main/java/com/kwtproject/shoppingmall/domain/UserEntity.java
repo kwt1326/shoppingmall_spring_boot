@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity extends EntityBase {
     // JPA repository 에서 GET 할때 기본 생성자 사용하여 @Builder 제거
     // @Builder 사용시 @NoArgsConstructor & @AllArgsConstructor 같이 사용 혹은 전 필드 생성자를 만들어준다.
