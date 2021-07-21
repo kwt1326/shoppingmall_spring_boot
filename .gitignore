@@ -38,4 +38,4 @@ out/
 .vscode/
 
 ### external referance ###
-application.yml
+src/main/**/application.yml
