@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . /app
 RUN chmod +x ./gradlew
 RUN ./gradlew build
-ENV $JAR_NAME=app.jar
+ENV JAR_NAME=app.jar
 COPY app/build/libs/*.jar $JAR_NAME
 RUN echo "jar name $JAR_NAME"
 RUN nohup java -jar \
