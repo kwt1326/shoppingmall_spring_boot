@@ -1,9 +1,6 @@
 FROM openjdk:11
 WORKDIR /app
 COPY . /app
-COPY ../../application.yml /app
-COPY ../../oci /app
-RUN ls
 RUN chmod +x ./gradlew
 RUN ./gradlew build
 ENV $JAR_NAME=app.jar
