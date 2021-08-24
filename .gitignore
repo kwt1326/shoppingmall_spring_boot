@@ -41,5 +41,6 @@ out/
 src/main/**/application.yml
 
 ### prod config files ###
-.application.yml
+application.yml
+prod-application.yml
 oci/
