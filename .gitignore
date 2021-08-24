@@ -39,3 +39,7 @@ out/
 
 ### external referance ###
 src/main/**/application.yml
+
+### prod config files ###
+.application.yml
+oci/
