@@ -41,6 +41,7 @@ out/
 src/main/**/application.yml
 
 ### prod config files ###
+deploy.sh
 prod-application.yml
 oci/
 nginx-ssl/data/certbot
