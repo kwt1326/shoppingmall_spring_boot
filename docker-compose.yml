@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   nginx:
@@ -9,22 +9,24 @@ services:
       - /nginx-proxy/conf:/etc/nginx/conf.d
       - /nginx-proxy/cert:/etc/letsencrypt
     ports: 
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     networks: backend
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   shoppingmall:
     container_name: shoppingmall
     image: kwt1326/spring-shoppingmall
     restart: always
-    depends_on: nginx
+    depends_on:
+      - nginx
     volumes:
       - /nginx-proxy/conf:/etc/nginx/conf.d # ssl-certification
       - /nginx-proxy/cert:/etc/letsencrypt # cert-challenge
     ports: 
-      - "8090:8090"
+      - 8090:8090
     networks: backend
 
 networks:
-  backend:
-    driver: bridge
+  default:
+    external:
+      name: nginx
