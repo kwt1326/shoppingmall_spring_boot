@@ -11,8 +11,6 @@ services:
     ports: 
       - 80:80
       - 443:443
-    networks: backend
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   shoppingmall:
     container_name: shoppingmall
     image: kwt1326/spring-shoppingmall
@@ -24,7 +22,6 @@ services:
       - /nginx-proxy/cert:/etc/letsencrypt # cert-challenge
     ports: 
       - 8090:8090
-    networks: backend
 
 networks:
   default:
