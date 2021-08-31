@@ -2,7 +2,6 @@ version: "3"
 
 services:
   certbot:
-    container_name: certbot
     image: certbot/certbot
     restart: unless-stopped
     volumes:
@@ -10,7 +9,6 @@ services:
       - /nginx-ssl/certbot/data:/var/www/certbot # cert-challenge
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
   nginx:
-    container_name: nginx
     image: nginx:1.21.1-alpine
     restart: unless-stopped
     volumes: 
@@ -21,12 +19,3 @@ services:
       - "80:80"
       - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-  shoppingmall:
-    container_name: shoppingmall
-    image: kwt1326/spring-shoppingmall
-    restart: always
-    depends_on:
-      - nginx
-      - certbot
-    ports: 
-      - "8090:8090"
