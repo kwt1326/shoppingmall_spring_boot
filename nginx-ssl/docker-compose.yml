@@ -13,8 +13,6 @@ services:
     container_name: nginx
     image: nginx:1.21.1-alpine
     restart: unless-stopped
-    depends_on:
-      - certbot
     volumes: 
       - /nginx-ssl/nginx:/etc/nginx/conf.d
       - /nginx-ssl/certbot/conf:/etc/letsencrypt
@@ -29,5 +27,6 @@ services:
     restart: always
     depends_on:
       - nginx
+      - certbot
     ports: 
       - "8090:8090"
