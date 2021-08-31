@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.1-alpine
+    restart: unless-stopped
+    volumes: 
+      - /nginx-proxy/conf:/etc/nginx/conf.d
+      - /nginx-proxy/cert:/etc/letsencrypt
+    ports: 
+      - "80:80"
+      - "443:443"
+    networks: backend
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  shoppingmall:
+    container_name: shoppingmall
+    image: kwt1326/spring-shoppingmall
+    restart: always
+    depends_on: nginx
+    volumes:
+      - /nginx-proxy/conf:/etc/nginx/conf.d # ssl-certification
+      - /nginx-proxy/cert:/etc/letsencrypt # cert-challenge
+    ports: 
+      - "8090:8090"
+    networks: backend
+
+networks:
+  backend:
+    driver: bridge

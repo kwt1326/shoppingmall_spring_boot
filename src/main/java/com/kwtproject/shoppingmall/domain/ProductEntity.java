@@ -24,6 +24,9 @@ public class ProductEntity extends EntityBase {
     private int price = 0;
 
     @Column(nullable = false)
+    private int heart = 0;
+
+    @Column(nullable = false)
     private float discount = 0;
 
     @Column(nullable = false, name = "img_slug")
