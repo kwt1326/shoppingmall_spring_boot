@@ -41,7 +41,7 @@ echo "*** jar name : $JAR_NAME ***"
 
 nohup java -jar \
         -Dspring.profiles.active=prod \
-        -Dspring.config.location=file:./prod-application.yml \
+        -Dspring.config.location=file:prod-application.yml \
         $REPOSITORY/$JAR_NAME 2>&1 &
 
 # Docker build test
