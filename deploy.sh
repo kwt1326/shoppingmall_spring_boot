@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPOSITORY=/home/ubuntu/app/git
+REPOSITORY=/home/opc/app/git
 PROJECT_NAME=shoppingmall_spring_boot
 
 cd $REPOSITORY/$PROJECT_NAME/
