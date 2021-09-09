@@ -37,12 +37,12 @@ echo "*** deploy new application ***"
 
 JAR_NAME=$(ls -tr $REPOSITORY/$PROJECT_NAME | grep jar | tail -n 1)
 
-echo "*** jar name : $REPOSITORY/$PROJECT_NAME/$JAR_NAME ***"
+echo "*** jar name : $JAR_NAME ***"
 
 nohup java -jar \
         -Dspring.profiles.active=prod \
-        -Dspring.config.location=file:$REPOSITORY/$PROJECT_NAME/prod-application.yml \
-        $REPOSITORY/$JAR_NAME 2>&1 &
+        -Dspring.config.location=file:prod-application.yml \
+        $JAR_NAME 2>&1 &
 
 # Docker build test
 
