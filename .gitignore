@@ -44,3 +44,6 @@ src/main/**/application.yml
 prod-application.yml
 oci/
 nginx-ssl/data/certbot
+app.jar
+shoppingmall*
+nohup.out

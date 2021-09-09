@@ -15,11 +15,11 @@ echo "*** project building ***"
 
 ./gradlew build
 
-cd $REPOSITORY
+cd $REPOSITORY/$PROJECT_NAME
 
 echo "*** build jar copy to parent Repo ***"
 
-cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/
+cp $REPOSITORY/$PROJECT_NAME/build/libs/*.jar $REPOSITORY/$PROJECT_NAME
 
 CURRENT_PID=$(pgrep -f ${PROJECT_NAME}.*.jar)
 
@@ -35,13 +35,13 @@ fi
 
 echo "*** deploy new application ***"
 
-JAR_NAME=$(ls -tr $REPOSITORY/ | grep jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/$PROJECT_NAME | grep jar | tail -n 1)
 
-echo "*** jar name : $JAR_NAME ***"
+echo "*** jar name : $REPOSITORY/$PROJECT_NAME/$JAR_NAME ***"
 
 nohup java -jar \
         -Dspring.profiles.active=prod \
-        -Dspring.config.location=file:prod-application.yml \
+        -Dspring.config.location=file:$REPOSITORY/$PROJECT_NAME/prod-application.yml \
         $REPOSITORY/$JAR_NAME 2>&1 &
 
 # Docker build test
