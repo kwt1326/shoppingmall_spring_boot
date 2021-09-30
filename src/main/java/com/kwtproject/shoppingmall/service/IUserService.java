@@ -5,6 +5,7 @@ import com.kwtproject.shoppingmall.dto.user.RequestSignIn;
 import com.kwtproject.shoppingmall.dto.user.RequestSignUp;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,6 @@ public interface IUserService extends UserDetailsService {
     List<UserEntity> findUsers();
 
     Optional<UserEntity> findOne(Long userId);
+
+    Boolean checkLogging(WebRequest request);
 }

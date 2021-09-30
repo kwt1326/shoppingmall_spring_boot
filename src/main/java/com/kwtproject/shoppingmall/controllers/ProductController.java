@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("product")
 public class ProductController {
-
-    @RequestMapping(value = "apply", method = RequestMethod.GET)
-    private String addProductPage() throws Exception {
-        return "/products/apply";
-    }
-
     @RequestMapping(value = "apply", method = RequestMethod.POST)
     private ResponseEntity<?> addProduct(@RequestBody RequestAddProduct params) throws Exception {
         System.out.println(params.toString());

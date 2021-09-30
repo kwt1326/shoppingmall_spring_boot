@@ -1,5 +1,7 @@
 package com.kwtproject.shoppingmall.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kwtproject.shoppingmall.dto.user.RequestSignIn;
 import com.kwtproject.shoppingmall.dto.user.RequestSignUp;
 import com.kwtproject.shoppingmall.dto.user.ResponseSignUp;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 @Controller
 @ResponseBody
@@ -43,6 +46,23 @@ public class UserController {
             return new ResponseEntity<>(new ResponseSignUp(jwt), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "auth/logging", method = RequestMethod.GET)
+    private ResponseEntity<String> checkLogging(WebRequest request) {
+        try {
+            Boolean result = userService.checkLogging(request);
+
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectNode responseObj = mapper.createObjectNode();
+            responseObj.put("result", result);
+
+            String responseJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseObj);
+
+            return new ResponseEntity(responseJson, result ? HttpStatus.OK : HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            return new ResponseEntity(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

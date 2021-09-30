@@ -55,9 +55,5 @@ public class RestAuthenticationJwtFilter extends UsernamePasswordAuthenticationF
         String token = jwtUtils.generateToken(user, roles);
 
         response.addHeader("Authorization", "Bearer " + token);
-
-//        Cookie storeIdCookie = new Cookie("shoppingmall-cookie", token);
-//        storeIdCookie.setMaxAge(60 * 60 * 24 * 30);
-//        response.addCookie(storeIdCookie);
     }
 }

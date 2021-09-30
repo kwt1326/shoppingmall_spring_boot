@@ -8,10 +8,13 @@ import com.kwtproject.shoppingmall.utils.authentication.JwtUtils;
 import com.kwtproject.shoppingmall.utils.authentication.ValidateUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.transaction.Transactional;
 import java.security.InvalidParameterException;
@@ -66,6 +69,17 @@ public class UserService implements IUserService { // common + security service
         } catch (Exception e) {
             throw new Exception("Throw Interval Server Error : " + e.getMessage());
         }
+    }
+
+    @Override
+    public Boolean checkLogging(WebRequest request) {
+        String token = request.getHeader("Authorization");
+        String username = jwtUtils.extractUsername(token);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String authorizedUsername = (String)authentication.getPrincipal();
+
+        return username.equals(authorizedUsername);
     }
 
     @Override

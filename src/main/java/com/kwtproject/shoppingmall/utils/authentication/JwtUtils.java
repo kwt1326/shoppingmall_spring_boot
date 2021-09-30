@@ -28,14 +28,10 @@ public class JwtUtils {
     @Value("${custom.jwt.expireHour}")
     private int expireHour;
 
-    public JwtUtils() {}
-
     public JwtUtils(ConfigurationPropertiesProvider config) {
         this.SECRET_KEY = config.getSecret();
         this.expireHour = config.getExpireHour();
     }
-
-    private long tokenValidTime = 1000L * 60 * 60 * expireHour;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -46,24 +42,31 @@ public class JwtUtils {
     }
 
     public List<SimpleGrantedAuthority> extractAuthorities(String token) {
-        System.out.println(extractAllClaims(token));
-        return ((List<?>)extractAllClaims(token).get("claim_role"))
-                .stream()
-                .map(authority -> new SimpleGrantedAuthority((String)authority))
-                .collect(Collectors.toList());
-
+        Optional<Claims> claims = extractAllClaims(token);
+        if (claims.isPresent()) {
+            return ((List<?>)claims.get().get("claim_role"))
+                    .stream()
+                    .map(authority -> new SimpleGrantedAuthority((String)authority))
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        Optional<Claims> claims = extractAllClaims(token);
+        if (claims.isPresent()) {
+            final Claims _claims = claims.get();
+            return claimsResolver.apply(_claims);
+        }
+        return null;
     }
-    private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
+
+    private Optional<Claims> extractAllClaims(String token) {
+        return Optional.ofNullable(Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token.substring(7)) // "Bearer " removed
-                .getBody();
+                .getBody());
     }
 
     private Boolean isTokenExpired(String token) {
@@ -83,12 +86,19 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        final SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        System.out.println(this.SECRET_KEY);
+        System.out.println(this.expireHour);
+        final long tokenValidTime = 1000L * 60 * 60 * this.expireHour;
+        final SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.SECRET_KEY));
+        final Date issueDate = new Date(System.currentTimeMillis());
+        final Date expireDate = new Date(System.currentTimeMillis() + tokenValidTime);
+        System.out.println(issueDate);
+        System.out.println(expireDate);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenValidTime))
+                .setIssuedAt(issueDate)
+                .setExpiration(expireDate)
                 .signWith(secretKey, SignatureAlgorithm.HS256).compact();
     }
 

@@ -2,7 +2,6 @@ package com.kwtproject.shoppingmall.config;
 
 import com.kwtproject.shoppingmall.security.CustomAccessDeniedHandler;
 import com.kwtproject.shoppingmall.service.UserService;
-import com.kwtproject.shoppingmall.utils.authentication.process.CustomSuccessHandler;
 import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationJwtFilter;
 import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthorizationJwtFilter;
 import com.kwtproject.shoppingmall.utils.common.ConfigurationPropertiesProvider;
@@ -46,12 +45,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin().disable() /** 기본 spring 로그인 창 비활성화 */
                     .authorizeRequests() /** HttpServletRequest 사용하는 요청들의 접근 제한을 건다. */
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                    // PUBLIC - COMMON
+                    // PUBLIC
                     .antMatchers("/public/**").permitAll()
                     .antMatchers("/user/auth/**").permitAll()
-                    // ADMIN
-                    .antMatchers("/login").permitAll()
-                    .antMatchers("/product/**").permitAll()
+                    .antMatchers("/admin/**").permitAll()
                     // OTHERS
                     .anyRequest().authenticated() /** 나머지 요청 모두 활성화 */
                 .and()
@@ -71,9 +68,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ConfigurationPropertiesProvider configurationPropertiesProvider() { return new ConfigurationPropertiesProvider(); }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() { return new CustomSuccessHandler(); }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() { return new CustomAccessDeniedHandler(); }

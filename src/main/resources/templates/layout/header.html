@@ -11,8 +11,43 @@
 </th:block>
     <div class="header">
         <h3>관리자 페이지</h3>&nbsp;
-        <h4 onclick="window.href='product/apply'">등록</h4><div>&nbsp;/&nbsp;</div>
-        <h4>목록</h4><div>&nbsp;/&nbsp;</div>
+        <h4><a id="a_login" href="/admin/login">로그인</a></h4><div>&nbsp;/&nbsp;</div>
+        <h4><a href="/admin/menu">메뉴</a></h4>
         <h4></h4>
     </div>
 </html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.XMLHttpRequest) {
+      const httpRequest = new XMLHttpRequest();
+      const cookie = document.cookie
+        ?.split('; ')
+        ?.find(row => row.startsWith('shoppingmall-cookie'))
+        ?.split('=')[1];
+      httpRequest.responseType = 'json';
+      httpRequest.open('GET', '/user/auth/logging');
+      httpRequest.setRequestHeader('Authorization', cookie)
+      httpRequest.send();
+
+      httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          const response = httpRequest.response;
+          if (httpRequest.status !== 200 || !response.result) {
+            if (!window.location.pathname === '/admin/login') {
+              alert("어드민 이용은 로그인이 필요합니다. 로그인 페이지로 이동합니다.")
+              location.href = '/admin/login';
+            }
+          } else {
+            if (window.location.pathname === '/admin/login') {
+              alert("이미 로그인 되어있습니다.")
+              history.back();
+            }
+<!--            const loginLink = document.getElementById('a_login');-->
+<!--            loginLink.value = "로그아웃";-->
+<!--            loginLink.href = -->
+          }
+        }
+      }
+    }
+});
+</script>
