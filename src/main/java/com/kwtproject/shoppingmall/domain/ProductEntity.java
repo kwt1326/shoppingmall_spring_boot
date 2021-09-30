@@ -2,6 +2,8 @@ package com.kwtproject.shoppingmall.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,11 +13,31 @@ import java.time.LocalDateTime;
 @Table(name = "products")
 public class ProductEntity extends EntityBase {
 
+    public ProductEntity(
+            String name,
+            int category,
+            int stock,
+            int price,
+            float discount,
+            boolean is_saleable,
+            String productImgSlug,
+            String productModelSlug
+    ) {
+        this.name = name;
+        this.category = category;
+        this.stock = stock;
+        this.price = price;
+        this.discount = discount;
+        this.is_saleable = is_saleable;
+        this.productImgSlug = productImgSlug;
+        this.productModelSlug = productModelSlug;
+    }
+
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private int category;
+    private int category = 0;
 
     @Column(nullable = false)
     private int stock = 0;
@@ -27,10 +49,13 @@ public class ProductEntity extends EntityBase {
     private int heart = 0;
 
     @Column(nullable = false)
-    private float discount = 0;
+    private float discount;
 
-    @Column(nullable = false, name = "img_slug")
+    @Column(nullable = true, name = "img_slug")
     private String productImgSlug;
+
+    @Column(nullable = true, name = "model_slug")
+    private String productModelSlug;
 
     @Column(nullable = false)
     private boolean is_saleable = true;

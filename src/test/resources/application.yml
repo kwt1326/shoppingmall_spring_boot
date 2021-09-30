@@ -5,6 +5,11 @@ custom:
     expireHour: 2
 
 spring:
+  datasource:
+    url: jdbc:h2:mem:shoppingmall;MODE=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: root
+    password:
   jpa:
     show-sql: true
     hibernate:
@@ -13,13 +18,8 @@ spring:
         time_zone: Asia/Seoul
       connection:
         characterEncoding: utf8
-      dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      dialect: org.hibernate.dialect.OracleDialect
   database-platform: org.hibernate.dialect.H2Dialect
-  datasource:
-    url: jdbc:h2:mem:shoppingmall;MODE=Oracle;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
   h2:
     console:
       enabled: true

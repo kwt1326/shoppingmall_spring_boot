@@ -34,7 +34,7 @@ public class UserController {
 //    }
 
     @RequestMapping(value = "auth/create", method = RequestMethod.POST)
-    private ResponseEntity<?> createUser(@RequestBody RequestSignUp requestSignUp) throws Exception {
+    private ResponseEntity<?> createUser(@RequestBody RequestSignUp requestSignUp) {
         try {
             userService.signUp(requestSignUp);
 

@@ -2,6 +2,7 @@ package com.kwtproject.shoppingmall.config;
 
 import com.kwtproject.shoppingmall.security.CustomAccessDeniedHandler;
 import com.kwtproject.shoppingmall.service.UserService;
+import com.kwtproject.shoppingmall.utils.authentication.process.CustomSuccessHandler;
 import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthenticationJwtFilter;
 import com.kwtproject.shoppingmall.utils.authentication.process.RestAuthorizationJwtFilter;
 import com.kwtproject.shoppingmall.utils.common.ConfigurationPropertiesProvider;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -29,8 +31,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
                 "/swagger-resources", "/configuration/security",
-                "/swagger-ui.html", "/webjars/**", "/swagger/**");
-
+                "/swagger-ui.html", "/webjars/**", "/swagger/**",
+                "/resources/**", "/static/**", "/css/**"
+        );
     }
 
     @Override
@@ -43,8 +46,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .formLogin().disable() /** 기본 spring 로그인 창 비활성화 */
                     .authorizeRequests() /** HttpServletRequest 사용하는 요청들의 접근 제한을 건다. */
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    // PUBLIC - COMMON
                     .antMatchers("/public/**").permitAll()
                     .antMatchers("/user/auth/**").permitAll()
+                    // ADMIN
+                    .antMatchers("/login").permitAll()
+                    .antMatchers("/product/**").permitAll()
+                    // OTHERS
                     .anyRequest().authenticated() /** 나머지 요청 모두 활성화 */
                 .and()
                     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
@@ -63,6 +71,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public ConfigurationPropertiesProvider configurationPropertiesProvider() { return new ConfigurationPropertiesProvider(); }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() { return new CustomSuccessHandler(); }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() { return new CustomAccessDeniedHandler(); }

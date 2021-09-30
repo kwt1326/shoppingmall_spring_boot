@@ -29,7 +29,6 @@ import static org.springframework.security.test.web.servlet.
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@TestPropertySource(properties = "spring.config.location=" + "classpath:application.yml")
 @Transactional
 public class UserControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();

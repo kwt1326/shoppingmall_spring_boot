@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -38,7 +39,9 @@ public class RestAuthenticationJwtFilter extends UsernamePasswordAuthenticationF
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(username, password);
 
-        return authenticationManager.authenticate(authToken);
+        Authentication authentication = authenticationManager.authenticate(authToken);
+
+        return authentication;
     }
 
     @Override
@@ -52,5 +55,9 @@ public class RestAuthenticationJwtFilter extends UsernamePasswordAuthenticationF
         String token = jwtUtils.generateToken(user, roles);
 
         response.addHeader("Authorization", "Bearer " + token);
+
+//        Cookie storeIdCookie = new Cookie("shoppingmall-cookie", token);
+//        storeIdCookie.setMaxAge(60 * 60 * 24 * 30);
+//        response.addCookie(storeIdCookie);
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.test.context.TestPropertySource;
 import javax.transaction.Transactional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@TestPropertySource(properties = "spring.config.location=" + "classpath:application.yml")
 @Transactional
 public class UserRepositoryTest {
 

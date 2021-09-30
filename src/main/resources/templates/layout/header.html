@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block layout:fragment="head">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link th:href="@{/css/layout.css}" rel="stylesheet" />
+</th:block>
+    <div class="header">
+        <h3>관리자 페이지</h3>&nbsp;
+        <h4 onclick="window.href='product/apply'">등록</h4><div>&nbsp;/&nbsp;</div>
+        <h4>목록</h4><div>&nbsp;/&nbsp;</div>
+        <h4></h4>
+    </div>
+</html>

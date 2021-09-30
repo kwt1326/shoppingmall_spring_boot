@@ -1,0 +1,23 @@
+.content_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.input_wrap {
+     display: flex;
+     flex-direction: column;
+     justify-content: flex-start;
+     margin-bottom: 10px;
+}
+
+.button_submit {
+    margin: 10px 0;
+    width: 100%;
+    height: 50px;
+    background: #333333;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    color: #ffffff;
+}

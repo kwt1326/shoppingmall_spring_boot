@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/index}"
+>
+<th:block layout:fragment="head">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link th:href="@{/css/products_apply.css}" rel="stylesheet" >
+</th:block>
+<body>
+<th:block layout:fragment="header" th:include="@{/layout/header}"></th:block>
+<div layout:fragment="content" class="content">
+    <div class="content_wrap">
+        <form method="post" action="/">
+            <div class="input_wrap_flex">
+                <article>분류</article>
+                <select>
+                    <option value="0">전체</option>
+                    <option value="1">Hololive EN</option>
+                    <option value="2">Hololive JP</option>
+                </select>
+            </div>
+            <div class="input_wrap">
+                <label for="input_name" class="form-label">상품명</label>
+                <input id="input_name" class="form-control" type="text">
+            </div>
+            <div class="input_wrap">
+                <label for="input_price" class="form-label">가격</label>
+                <input id="input_price" class="form-control" type="number">
+            </div>
+            <div class="input_wrap">
+                <label for="input_stock" class="form-label">재고</label>
+                <input id="input_stock" class="form-control" type="number">
+            </div>
+            <div class="input_wrap">
+                <label for="input_discount" class="form-label">할인율</label>
+                <input id="input_discount" class="form-control" type="number">
+            </div>
+            <div class="input_wrap">
+                <label for="input_is_saleable" class="form-label">즉시 판매 여부</label>
+                <input id="input_is_saleable" class="form-check-input" type="checkbox">
+            </div>
+            <div class="input_wrap">
+                <label for="input_img_slug" class="form-label">대표 이미지 이름</label>
+                <input id="input_img_slug" class="form-control" type="text">
+            </div>
+            <div class="input_wrap">
+                <label for="input_model_slug" class="form-label">모델 뷰 전용 모델명</label>
+                <input id="input_model_slug" class="form-control" type="text">
+            </div>
+        </form>
+    </div>
+</div>
+<th:block layout:fragment="footer" th:include="@{/layout/footer}"></th:block>
+</body>
+<script>
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--        function submitFunc(dom) {-->
+<!--            dom.submit();-->
+<!--        }-->
+<!--        -->
+<!--        const btnSubmitDOM = document.getElementById("btn_submit");-->
+<!--        btnSubmitDOM.addEventListener("click", submitFunc)-->
+<!--    })-->
+</script>
+</html>
