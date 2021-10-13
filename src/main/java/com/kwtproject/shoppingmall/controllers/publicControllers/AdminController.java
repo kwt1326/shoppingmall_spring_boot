@@ -14,9 +14,15 @@ public class AdminController {
         return "/login";
     }
 
+    @GetMapping("signup")
+    private String SignupPage() { return "/signup"; }
+
     @GetMapping("menu")
     private String MenuPage() { return "/menu"; }
 
     @GetMapping("product/apply")
     private String ApplyProductPage() { return "/products/apply"; }
+
+    @GetMapping("product/list")
+    private String ProductListPage() { return "/products/list"; }
 }

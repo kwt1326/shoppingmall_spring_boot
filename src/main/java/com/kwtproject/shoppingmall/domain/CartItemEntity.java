@@ -19,10 +19,10 @@ public class CartItemEntity extends EntityBase {
     private short quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(referencedColumnName = "id")
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(referencedColumnName = "id")
     private CartEntity cart;
 }

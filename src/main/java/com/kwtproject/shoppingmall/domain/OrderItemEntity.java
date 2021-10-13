@@ -19,10 +19,10 @@ public class OrderItemEntity extends EntityBase {
     private short quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(referencedColumnName = "id")
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "parent_order_id")
-    private OrderEntity order;
+    @JoinColumn(referencedColumnName = "id")
+    private OrderEntity parent_order;
 }

@@ -31,7 +31,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui",
                 "/swagger-resources", "/configuration/security",
                 "/swagger-ui.html", "/webjars/**", "/swagger/**",
-                "/resources/**", "/static/**", "/css/**"
+                "/resources/**", "/static/**", "/css/**", "/js/**"
         );
     }
 
@@ -43,7 +43,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .csrf().disable() /** csrf 사용 비활성화 - REST API 방식에 어긋남 */
                     .formLogin().disable() /** 기본 spring 로그인 창 비활성화 */
-                    .authorizeRequests() /** HttpServletRequest 사용하는 요청들의 접근 제한을 건다. */
+                    .httpBasic().disable()
+                .authorizeRequests() /** HttpServletRequest 사용하는 요청들의 접근 제한을 건다. */
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                     // PUBLIC
                     .antMatchers("/public/**").permitAll()
@@ -55,6 +56,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.logout()
+                .logoutUrl("/user/auth/logout")
+                .invalidateHttpSession(true);
 
         http.addFilter(new RestAuthenticationJwtFilter(authenticationManager(), configurationPropertiesProvider()));
         http.addFilter(new RestAuthorizationJwtFilter(authenticationManager(), configurationPropertiesProvider()));

@@ -69,9 +69,9 @@ public class UserControllerTest {
         String resultString = actions.andReturn().getResponse().getContentAsString();
 
         JacksonJsonParser jsonParser = new JacksonJsonParser();
-        String token = jsonParser.parseMap(resultString).get("jwt").toString();
+        String result = jsonParser.parseMap(resultString).get("result").toString();
 
-        System.out.println(token);
+        System.out.println("RESULT : " + result);
     }
 
 //    @Test

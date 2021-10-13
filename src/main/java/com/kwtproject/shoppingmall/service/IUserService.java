@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IUserService extends UserDetailsService {
-    String signUp(RequestSignUp requestSignUp) throws Exception;
+    String signUp(RequestSignUp requestSignUp, String role) throws Exception;
 
     List<UserEntity> findUsers();
 

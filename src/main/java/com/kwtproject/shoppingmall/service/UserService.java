@@ -42,7 +42,7 @@ public class UserService implements IUserService { // common + security service
 
     /* 가입 (로그인 security 에 위임) */
     @Override
-    public String signUp(RequestSignUp requestSignUp) throws Exception {
+    public String signUp(RequestSignUp requestSignUp, String role) throws Exception {
         try {
             /* 패스워드 유효성 검사 (8-16자 영/숫자/특수문자 1자 이상) */
             if (new ValidateUtils().ValidatePassword(requestSignUp.getPassword()) == false) {
@@ -60,7 +60,7 @@ public class UserService implements IUserService { // common + security service
             user.setUsername(requestSignUp.getUsername());
             user.setUserContact(requestSignUp.getContact());
             user.setEmail(requestSignUp.getEmail());
-            user.setRole("USER_COMMON");
+            user.setRole(role);
 
             repository.save(user);
 
@@ -77,6 +77,10 @@ public class UserService implements IUserService { // common + security service
         String username = jwtUtils.extractUsername(token);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        System.out.println(username);
+        System.out.println((String)authentication.getPrincipal());
+
         String authorizedUsername = (String)authentication.getPrincipal();
 
         return username.equals(authorizedUsername);

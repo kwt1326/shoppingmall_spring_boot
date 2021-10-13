@@ -58,7 +58,7 @@ public class RestAuthorizationJwtFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-
+System.out.println(token);
         if (utils.isNotEmpty(token)) {
             try {
                 // parse JWT

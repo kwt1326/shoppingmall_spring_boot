@@ -13,6 +13,6 @@ public class CartEntity extends EntityBase {
     private String token;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(referencedColumnName = "id")
     private UserEntity user;
 }

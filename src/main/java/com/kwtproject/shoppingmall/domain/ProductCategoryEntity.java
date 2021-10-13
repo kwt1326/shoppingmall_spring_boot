@@ -14,7 +14,7 @@ public class ProductCategoryEntity {
 
     // self-refer
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_category_id")
+    @JoinColumn(referencedColumnName = "id")
     private ProductCategoryEntity parent;
 
     // self-refer

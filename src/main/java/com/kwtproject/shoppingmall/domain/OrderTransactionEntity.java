@@ -24,10 +24,10 @@ public class OrderTransactionEntity extends EntityBase {
     private String orderMethod;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(referencedColumnName = "id")
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(referencedColumnName = "id")
     private OrderEntity order;
 }

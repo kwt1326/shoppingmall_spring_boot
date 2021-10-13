@@ -36,6 +36,6 @@ public class OrderEntity extends EntityBase {
     private int shippingCharge;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(referencedColumnName = "id")
     private UserEntity user;
 }

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/index}"
+>
+<th:block layout:fragment="head">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <link th:href="@{/css/products.css}" rel="stylesheet" >
+</th:block>
+<body>
+<th:block layout:fragment="header" th:include="@{/layout/header}"></th:block>
+<div layout:fragment="content" class="content">
+    <div class="content_wrap">
+        <article class="title">상품목록</article>
+        <div id="product_list_wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>등록번호</th>
+                    <th>이름</th>
+                    <th>가격</th>
+                    <th>할인율</th>
+                    <th>재고</th>
+                    <th>찜횟수</th>
+                    <th>사진 등록 유무</th>
+                    <th>모델 등록 유무</th>
+                    <th>등록일</th>
+                    <th>삭제일</th>
+                    <th>업데이트일</th>
+                </tr>
+                </thead>
+                <tbody id="product_list" />
+            </table>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="footer" th:include="@{/layout/footer}"></th:block>
+</body>
+<script th:src="@{/js/callApi.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        callApi({
+            method: 'GET',
+            url: `/product/list?page=${1}`,
+            body: {}
+        }, (response, status) => {
+            if (response && status === 200) {
+                document.getElementById('product_list').innerHTML = `<tbody>
+                    ${response.list?.map(product => {
+                      return `<tr>
+                            <td>${product.id}</td>
+                            <td>${product.name}</td>
+                            <td>${product.price}</td>
+                            <td>${product.discount}</td>
+                            <td>${product.stock}</td>
+                            <td>${product.heart}</td>
+                            <td>${!!product.productImgSlug ? "등록됨" : "없음"}</td>
+                            <td>${!!product.productModelSlug ? "등록됨" : "없음"}</td>
+                            <td>${product.createdAt}</td>
+                            <td>${product.removedAt}</td>
+                            <td>${product.updatedAt}</td>
+                        </tr>`
+                    })}
+                  </tbody>`.replaceAll(',', '');
+            }
+        })
+    })
+</script>
+</html>

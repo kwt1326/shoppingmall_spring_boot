@@ -15,7 +15,7 @@
 <th:block layout:fragment="header" th:include="@{/layout/header}"></th:block>
 <div layout:fragment="content" class="content">
     <div class="apply_content_wrap">
-        <article class="title">상품등록</article>
+        <article class="title">상품수정</article>
         <div class="content_input_wrap">
             <div class="input_wrap_flex">
                 <article>분류</article>
@@ -54,7 +54,7 @@
                 <input id="input_model_slug" class="form-control" type="text">
             </div>
         </div>
-        <button id="submit_btn">등록</button>
+        <button id="submit_btn">수정</button>
     </div>
 </div>
 <th:block layout:fragment="footer" th:include="@{/layout/footer}"></th:block>
@@ -88,12 +88,12 @@
                 }
             }, (response, status) => {
                 if (response && status === 200) {
-                    if (response?.result) {
-                        return alert("상품이 등록 되었습니다.");
+                    if (!!httpRequest.response?.result) {
+                        return alert("상품이 수 되었습니다.");
                     }
                 }
                 alert("등록에 실패했습니다. 입력 정보를 확인해주세요.");
-            })
+            }
         })
     })
 </script>

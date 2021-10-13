@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 @Table(name = "products")
 public class ProductEntity extends EntityBase {
 
+    public ProductEntity() {}
+
     public ProductEntity(
+            UserEntity user,
             String name,
             int category,
             int stock,
@@ -23,6 +26,7 @@ public class ProductEntity extends EntityBase {
             String productImgSlug,
             String productModelSlug
     ) {
+        this.user = user;
         this.name = name;
         this.category = category;
         this.stock = stock;
@@ -67,4 +71,8 @@ public class ProductEntity extends EntityBase {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "stop_at", nullable = true)
     private LocalDateTime stopAt;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(referencedColumnName = "id")
+    private UserEntity user;
 }

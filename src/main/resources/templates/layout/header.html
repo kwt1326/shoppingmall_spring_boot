@@ -18,6 +18,7 @@
 </html>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    const ignorePath = ['/admin/signup', '/admin/login']
     if (window.XMLHttpRequest) {
       const httpRequest = new XMLHttpRequest();
       const cookie = document.cookie
@@ -32,15 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
       httpRequest.onreadystatechange = function () {
         if (httpRequest.readyState === XMLHttpRequest.DONE) {
           const response = httpRequest.response;
-          if (httpRequest.status !== 200 || !response.result) {
-            if (!window.location.pathname === '/admin/login') {
+          if (httpRequest.status !== 200 || !response?.result) {
+            if (!ignorePath.includes(window.location.pathname)) {
               alert("어드민 이용은 로그인이 필요합니다. 로그인 페이지로 이동합니다.")
               location.href = '/admin/login';
             }
           } else {
-            if (window.location.pathname === '/admin/login') {
+            if (ignorePath.includes(window.location.pathname)) {
               alert("이미 로그인 되어있습니다.")
-              history.back();
+              location.href = '/admin/menu';
             }
 <!--            const loginLink = document.getElementById('a_login');-->
 <!--            loginLink.value = "로그아웃";-->

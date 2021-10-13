@@ -16,6 +16,7 @@
 <th:block layout:fragment="header" th:include="@{/layout/header}"></th:block>
 <div layout:fragment="content" class="content">
     <div class="content_wrap">
+        <article class="title">로그인</article>
         <div class="input_wrap">
             <label for="input_id" class="form-label">아이디</label>
             <input id="input_id" class="form-control" type="text" name='username'>
@@ -24,14 +25,21 @@
             <label for="input_pw" class="form-label">비밀번호</label>
             <input id="input_pw" class="form-control" type="password" name='password'>
         </div>
-        <div class="input_wrap">
+        <div class="btn_wrap">
             <input id="submit_btn" class="button_submit" name="submit" type="submit" value="로그인"/>
+            <input id="signup_admin_btn" class="button_signup" name="submit" type="submit" value="관리자 회원가입"/>
         </div>
     </div>
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const btnSubmit = document.getElementById('submit_btn');
+        const btnSignup = document.getElementById('signup_admin_btn');
+
+        btnSignup.addEventListener("click", function() {
+            location.href = '/admin/signup';
+        });
+
         btnSubmit.addEventListener("click", function() {
             const inputID = document.getElementById('input_id');
             const inputPW = document.getElementById('input_pw');
@@ -47,7 +55,9 @@
                             const responseHeader = httpRequest.getResponseHeader('Authorization');
                             if (responseHeader) {
                                 document.cookie = `shoppingmall-cookie=${responseHeader}`;
-                                return alert("로그인이 성공 하였습니다.");
+                                alert("로그인이 성공 하였습니다.");
+                                location.href = '/admin/menu';
+                                return;
                             }
                         }
                         alert("로그인 요청 실패했습니다.")

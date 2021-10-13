@@ -1,7 +1,12 @@
 package com.kwtproject.shoppingmall.product;
 
 import com.kwtproject.shoppingmall.domain.ProductEntity;
+import com.kwtproject.shoppingmall.domain.QProductEntity;
+import com.kwtproject.shoppingmall.domain.UserEntity;
 import com.kwtproject.shoppingmall.repository.product.IProductRepository;
+import com.kwtproject.shoppingmall.repository.user.IUserRepository;
+import com.kwtproject.shoppingmall.testUtils.CreateTestEntity;
+import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -22,10 +27,18 @@ public class ProductRepositoryTest {
     @Autowired
     private IProductRepository repository;
 
+    @Autowired
+    private IUserRepository userRepository;
+
     @Test
     @Order(1)
     public void save() {
+        CreateTestEntity createUtil = new CreateTestEntity();
+
+        UserEntity userEntity = createUtil.createUser(userRepository);
+
         ProductEntity entity = new ProductEntity(
+                userEntity,
                 "test_product",
                 1,
                 100,
@@ -46,10 +59,15 @@ public class ProductRepositoryTest {
     @Test
     @Order(2)
     public void getListQuery() {
+        CreateTestEntity createUtil = new CreateTestEntity();
+
+        UserEntity userEntity = createUtil.createUser(userRepository);
+
         List<ProductEntity> list = new ArrayList<>();
 
         for (int i = 0 ; i < 6 ; ++i) {
             ProductEntity entity = new ProductEntity(
+                    userEntity,
                     "test_product_" + Integer.toString(i),
                      1,
                     100,
@@ -65,9 +83,15 @@ public class ProductRepositoryTest {
 
         repository.saveAll(list);
 
-        Page<ProductEntity> result = repository.findFilterAll(
-                1,
-                "test_product",
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QProductEntity entity = QProductEntity.productEntity;
+
+        booleanBuilder.and(entity.category.eq(1));
+        booleanBuilder.and(entity.name.contains("test_product"));
+
+        Page<ProductEntity> result = repository.findAll(
+                booleanBuilder,
                 PageRequest.of(0, 5, Sort.by("id"))
         );
 

@@ -3,21 +3,20 @@ package com.kwtproject.shoppingmall.dto.product;
 import lombok.Builder;
 import lombok.Getter;
 
+@Builder
 @Getter
 public class RequestAddProduct {
     private String name;
 
-    private int category = 0;
+    private int category;
 
-    private int stock = 0;
+    private int stock;
 
-    private int price = 0;
+    private int price;
 
-    private int heart = 0;
+    private float discount;
 
-    private float discount = 0;
-
-    private boolean isSaleable = true;
+    private boolean isSaleable;
 
     // nullable
     private String productImgSlug;

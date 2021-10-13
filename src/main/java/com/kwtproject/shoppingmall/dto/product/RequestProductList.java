@@ -8,7 +8,7 @@ import lombok.Getter;
 public class RequestProductList {
     private String name;
 
-    private int category;
+    private Integer category;
 
     @Builder.Default
     private int page = 1;

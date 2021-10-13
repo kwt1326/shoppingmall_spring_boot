@@ -2,22 +2,21 @@ package com.kwtproject.shoppingmall.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kwtproject.shoppingmall.dto.user.RequestSignIn;
 import com.kwtproject.shoppingmall.dto.user.RequestSignUp;
-import com.kwtproject.shoppingmall.dto.user.ResponseSignUp;
+import com.kwtproject.shoppingmall.vo.user.ResponseSignUp;
 import com.kwtproject.shoppingmall.service.UserService;
 import com.kwtproject.shoppingmall.utils.authentication.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+
+import javax.servlet.ServletRequest;
 
 @Controller
 @ResponseBody
@@ -37,13 +36,20 @@ public class UserController {
 //    }
 
     @RequestMapping(value = "auth/create", method = RequestMethod.POST)
-    private ResponseEntity<?> createUser(@RequestBody RequestSignUp requestSignUp) {
+    private ResponseEntity<?> createUser(@RequestBody RequestSignUp requestSignUp, ServletRequest request) {
         try {
-            userService.signUp(requestSignUp);
+            String requestFrom = request.getServerName() + ":" + Integer.toString(request.getServerPort());
 
-            String jwt = jwtUtils.generateToken(userService.loadUserByUsername(requestSignUp.getUsername()));
+            System.out.println(requestFrom);
 
-            return new ResponseEntity<>(new ResponseSignUp(jwt), HttpStatus.OK);
+            // 요청 출처가 로컬이면 어드민 가입 신청, 그 외에는 외부 요청(프론트) 이므로 일반 유저로 자동 Role 처리
+            String role = requestFrom.equals("localhost:8090") ? "ADMIN_COMMON" : "USER_COMMON";
+System.out.println(role);
+            userService.signUp(requestSignUp, role);
+
+            jwtUtils.generateToken(userService.loadUserByUsername(requestSignUp.getUsername()));
+
+            return new ResponseEntity<>(new ResponseSignUp("Success signup"), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

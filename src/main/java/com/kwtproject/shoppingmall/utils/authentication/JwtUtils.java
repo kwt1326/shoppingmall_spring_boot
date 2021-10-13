@@ -86,14 +86,11 @@ public class JwtUtils {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        System.out.println(this.SECRET_KEY);
-        System.out.println(this.expireHour);
         final long tokenValidTime = 1000L * 60 * 60 * this.expireHour;
         final SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.SECRET_KEY));
         final Date issueDate = new Date(System.currentTimeMillis());
         final Date expireDate = new Date(System.currentTimeMillis() + tokenValidTime);
-        System.out.println(issueDate);
-        System.out.println(expireDate);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)

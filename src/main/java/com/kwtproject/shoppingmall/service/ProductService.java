@@ -1,18 +1,23 @@
 package com.kwtproject.shoppingmall.service;
 
 import com.kwtproject.shoppingmall.domain.ProductEntity;
+import com.kwtproject.shoppingmall.domain.QProductEntity;
+import com.kwtproject.shoppingmall.domain.UserEntity;
 import com.kwtproject.shoppingmall.dto.product.RequestAddProduct;
 import com.kwtproject.shoppingmall.dto.product.RequestProductList;
 import com.kwtproject.shoppingmall.repository.product.IProductRepository;
+import com.kwtproject.shoppingmall.repository.user.IUserRepository;
+import com.querydsl.core.BooleanBuilder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.print.Pageable;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,13 +26,36 @@ public class ProductService implements IProductService {
     @Autowired
     IProductRepository productRepository;
 
+    @Autowired
+    IUserRepository userRepository;
+
     @Override
     public Page<ProductEntity> getProductList(RequestProductList dto) {
-        return productRepository.findFilterAll(
-                dto.getCategory(),
-                dto.getName(),
-                PageRequest.of(dto.getPage(), 20, Sort.by("id"))
-                );
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        QProductEntity entity = QProductEntity.productEntity;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<UserEntity> userEntity = userRepository.findByUserName((String)authentication.getPrincipal());
+
+        if (userEntity.isPresent()) {
+            UserEntity user = userEntity.get();
+            booleanBuilder.and(entity.user.id.eq(user.getId()));
+        }
+
+        if (dto.getCategory() != null) {
+            booleanBuilder.and(entity.category.eq(dto.getCategory()));
+        }
+        if (dto.getName() != null) {
+            booleanBuilder.and(entity.name.eq(dto.getName()));
+        }
+
+        Page<ProductEntity> result = productRepository.findAll(
+                booleanBuilder,
+                PageRequest.of(dto.getPage() - 1, 20, Sort.by("id"))
+        );
+
+        return result;
     }
 
     @Override
@@ -36,20 +64,27 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductEntity addProduct(RequestAddProduct dto) throws Exception {
-        ProductEntity entity = new ProductEntity(
-                dto.getName(),
-                dto.getCategory(),
-                dto.getStock(),
-                dto.getPrice(),
-                0, true,
-                dto.getProductImgSlug(),
-                dto.getProductModelSlug()
-        );
-        ProductEntity result = productRepository.save(entity);
-        System.out.print("TEST SAVE : ");
-        System.out.print(result);
-        return result;
+    public ProductEntity addProduct(RequestAddProduct dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<UserEntity> userEntity = userRepository.findByUserName((String)authentication.getPrincipal());
+
+        if (userEntity.isPresent()) {
+            ProductEntity entity = new ProductEntity(
+                    userEntity.get(),
+                    dto.getName(),
+                    dto.getCategory(),
+                    dto.getStock(),
+                    dto.getPrice(),
+                    dto.getDiscount(),
+                    dto.isSaleable(),
+                    dto.getProductImgSlug(),
+                    dto.getProductModelSlug()
+            );
+            ProductEntity result = productRepository.save(entity);
+
+            return result;
+        }
+        return null;
     }
 
     @Override

@@ -14,11 +14,11 @@ import java.util.List;
 public class ProductReviewEntity extends EntityBase {
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(referencedColumnName = "id")
     private ProductEntity product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_review_id")
+    @JoinColumn(referencedColumnName = "id")
     private ProductReviewEntity parent;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
