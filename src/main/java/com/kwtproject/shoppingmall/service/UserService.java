@@ -78,9 +78,6 @@ public class UserService implements IUserService { // common + security service
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println(username);
-        System.out.println((String)authentication.getPrincipal());
-
         String authorizedUsername = (String)authentication.getPrincipal();
 
         return username.equals(authorizedUsername);

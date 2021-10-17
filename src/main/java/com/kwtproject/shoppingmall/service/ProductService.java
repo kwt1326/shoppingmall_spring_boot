@@ -35,12 +35,17 @@ public class ProductService implements IProductService {
 
         QProductEntity entity = QProductEntity.productEntity;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<UserEntity> userEntity = userRepository.findByUserName((String)authentication.getPrincipal());
+        Sort sort = Sort.by("id").descending();
 
-        if (userEntity.isPresent()) {
-            UserEntity user = userEntity.get();
-            booleanBuilder.and(entity.user.id.eq(user.getId()));
+        // 본인이 등록한 상품 리스트 검색 조건
+        if (dto.isPublic() == false) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Optional<UserEntity> userEntity = userRepository.findByUserName((String)authentication.getPrincipal());
+
+            if (userEntity.isPresent()) {
+                UserEntity user = userEntity.get();
+                booleanBuilder.and(entity.user.id.eq(user.getId()));
+            }
         }
 
         if (dto.getCategory() != null) {
@@ -49,10 +54,13 @@ public class ProductService implements IProductService {
         if (dto.getName() != null) {
             booleanBuilder.and(entity.name.eq(dto.getName()));
         }
+        if (dto.isPopular() == true) {
+            sort = sort.and(Sort.by("heart").descending());
+        }
 
         Page<ProductEntity> result = productRepository.findAll(
                 booleanBuilder,
-                PageRequest.of(dto.getPage() - 1, 20, Sort.by("id"))
+                PageRequest.of(dto.getPage() - 1, 20, sort)
         );
 
         return result;
@@ -60,6 +68,7 @@ public class ProductService implements IProductService {
 
     @Override
     public Optional<ProductEntity> getProductDetail(int id) {
+
         return Optional.empty();
     }
 
@@ -78,11 +87,38 @@ public class ProductService implements IProductService {
                     dto.getDiscount(),
                     dto.isSaleable(),
                     dto.getProductImgSlug(),
+                    dto.getProductDetailImgSlug(),
                     dto.getProductModelSlug()
             );
             ProductEntity result = productRepository.save(entity);
 
             return result;
+        }
+        return null;
+    }
+
+    @Override
+    public ProductEntity modifyProduct(RequestAddProduct dto, String id) {
+        if (id != null) {
+            Optional<ProductEntity> optional = productRepository.findById(Long.getLong(id));
+
+            if (optional.isPresent()) {
+                ProductEntity entity = optional.get();
+
+                entity.setName(dto.getName());
+                entity.setCategory(dto.getCategory());
+                entity.setStock(dto.getStock());
+                entity.setPrice(dto.getPrice());
+                entity.setDiscount(dto.getDiscount());
+                entity.setProductImgSlug(dto.getProductImgSlug());
+                entity.setProductDetailImgSlug(dto.getProductDetailImgSlug());
+                entity.setProductModelSlug(dto.getProductImgSlug());
+                entity.set_saleable(dto.isSaleable());
+
+                productRepository.save(entity);
+
+                return entity;
+            }
         }
         return null;
     }

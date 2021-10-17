@@ -5,15 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ResponseProductListElement {
+public class ResponsePublicProductElement {
     private Long id;
     private String name;
-    private int category;
     private int stock;
     private int price;
     private float discount;
-    private boolean is_saleable;
+    private int heart;
     private String img_src;
-    private String model_src;
-    private long user_id = -1;
 }

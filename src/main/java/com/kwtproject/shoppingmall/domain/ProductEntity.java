@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "products")
 public class ProductEntity extends EntityBase {
@@ -24,6 +26,7 @@ public class ProductEntity extends EntityBase {
             float discount,
             boolean is_saleable,
             String productImgSlug,
+            String productDetailImgSlug,
             String productModelSlug
     ) {
         this.user = user;
@@ -34,6 +37,7 @@ public class ProductEntity extends EntityBase {
         this.discount = discount;
         this.is_saleable = is_saleable;
         this.productImgSlug = productImgSlug;
+        this.productDetailImgSlug = productDetailImgSlug;
         this.productModelSlug = productModelSlug;
     }
 
@@ -57,6 +61,9 @@ public class ProductEntity extends EntityBase {
 
     @Column(nullable = true, name = "img_slug")
     private String productImgSlug;
+
+    @Column(nullable = true, name = "img_detail_slug")
+    private String productDetailImgSlug;
 
     @Column(nullable = true, name = "model_slug")
     private String productModelSlug;

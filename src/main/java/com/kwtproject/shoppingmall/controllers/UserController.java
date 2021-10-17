@@ -40,11 +40,9 @@ public class UserController {
         try {
             String requestFrom = request.getServerName() + ":" + Integer.toString(request.getServerPort());
 
-            System.out.println(requestFrom);
-
             // 요청 출처가 로컬이면 어드민 가입 신청, 그 외에는 외부 요청(프론트) 이므로 일반 유저로 자동 Role 처리
             String role = requestFrom.equals("localhost:8090") ? "ADMIN_COMMON" : "USER_COMMON";
-System.out.println(role);
+
             userService.signUp(requestSignUp, role);
 
             jwtUtils.generateToken(userService.loadUserByUsername(requestSignUp.getUsername()));

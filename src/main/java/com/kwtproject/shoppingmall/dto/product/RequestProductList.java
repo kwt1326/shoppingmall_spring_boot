@@ -11,5 +11,11 @@ public class RequestProductList {
     private Integer category;
 
     @Builder.Default
+    private boolean popular = false;
+
+    @Builder.Default
+    private boolean isPublic = true;
+
+    @Builder.Default
     private int page = 1;
 }

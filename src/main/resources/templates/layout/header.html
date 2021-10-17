@@ -39,13 +39,19 @@ document.addEventListener("DOMContentLoaded", function () {
               location.href = '/admin/login';
             }
           } else {
+            function clickFunc() {
+                document.cookie = `shoppingmall-cookie=`;
+                alert('로그아웃 되었습니다');
+                return '/admin/login';
+            }
+
+            const loginLink = document.getElementById('a_login');
+            loginLink.value = "로그아웃";
+            loginLink.href = 'javascript:clickFunc();'
             if (ignorePath.includes(window.location.pathname)) {
               alert("이미 로그인 되어있습니다.")
               location.href = '/admin/menu';
             }
-<!--            const loginLink = document.getElementById('a_login');-->
-<!--            loginLink.value = "로그아웃";-->
-<!--            loginLink.href = -->
           }
         }
       }

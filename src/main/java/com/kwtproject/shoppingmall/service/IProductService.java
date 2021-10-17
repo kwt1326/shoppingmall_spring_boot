@@ -15,5 +15,7 @@ public interface IProductService {
 
     ProductEntity addProduct(RequestAddProduct dto) throws Exception;
 
+    ProductEntity modifyProduct(RequestAddProduct dto, String id) throws Exception;
+
     boolean deleteProduct() throws Exception;
 }

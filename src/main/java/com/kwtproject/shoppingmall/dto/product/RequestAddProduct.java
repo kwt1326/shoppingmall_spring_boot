@@ -22,5 +22,8 @@ public class RequestAddProduct {
     private String productImgSlug;
 
     // nullable
+    private String productDetailImgSlug;
+
+    // nullable
     private String productModelSlug;
 }
