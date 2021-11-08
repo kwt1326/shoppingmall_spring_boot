@@ -53,6 +53,10 @@
                 <label for="input_model_slug" class="form-label">모델 뷰 전용 모델명</label>
                 <input id="input_model_slug" class="form-control" type="text">
             </div>
+            <div class="input_wrap">
+                <label for="input_detail_slug" class="form-label">상세 설명 이미지</label>
+                <input id="input_detail_slug" class="form-control" type="text">
+            </div>
         </div>
         <button id="submit_btn">수정</button>
     </div>
@@ -61,7 +65,29 @@
 </body>
 <script th:src="@{/js/callApi.js}"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
+        const splitPath = window.location.pathname.split('/');
+        const id = splitPath[splitPath?.length - 1];
+
+        callApi({
+            method: 'GET',
+            url: `/public/product/${id}`,
+        }, (response, status) => {
+            if (response && status === 200) {
+                document.getElementById('select_kind').value = response.category;
+                document.getElementById('input_name').value = response.name;
+                document.getElementById('input_price').value = response.price;
+                document.getElementById('input_stock').value = response.stock;
+                document.getElementById('input_discount').value = response.discount;
+                document.getElementById('input_is_saleable').checked = response.saleable;
+                document.getElementById('input_img_slug').value = response.productImgSlug;
+                document.getElementById('input_model_slug').value = response.productModelSlug;
+                document.getElementById('input_detail_slug').value = response.productDetailImgSlug;
+                return;
+            }
+            alert("해당 상품의 정보가 존재하지 않거나 찾지 못했습니다.");
+        })
+
         const btnSubmit = document.getElementById('submit_btn');
         btnSubmit.addEventListener("click", function() {
             const selectValue = Number(document.getElementById('select_kind').value);
@@ -72,10 +98,11 @@
             const inputIsSaleableValue = document.getElementById('input_is_saleable').checked;
             const inputImgSlugValue = document.getElementById('input_img_slug').value;
             const inputModelSlugValue = document.getElementById('input_model_slug').value;
+            const inputDetailSlugValue = document.getElementById('input_detail_slug').value;
 
             callApi({
                 method: 'POST',
-                url: '/product/apply',
+                url: `/product/${id}`,
                 body: {
                     name: inputNameValue,
                     category: selectValue,
@@ -85,15 +112,16 @@
                     isSaleable: inputIsSaleableValue,
                     productImgSlug: inputImgSlugValue,
                     productModelSlug: inputModelSlugValue,
+                    productDetailImgSlug: inputDetailSlugValue
                 }
             }, (response, status) => {
                 if (response && status === 200) {
                     if (!!httpRequest.response?.result) {
-                        return alert("상품이 수 되었습니다.");
+                        return alert("상품이 수정 되었습니다.");
                     }
                 }
                 alert("등록에 실패했습니다. 입력 정보를 확인해주세요.");
-            }
+            });
         })
     })
 </script>

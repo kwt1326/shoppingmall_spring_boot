@@ -86,13 +86,8 @@ public class ProductController {
             return new ResponseEntity<>(resultVo, HttpStatus.OK);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode responseObj = mapper.createObjectNode();
-        responseObj.put("result", "failed JPA queried");
-
-        String responseJson = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(responseObj);
-
-        return new ResponseEntity<>(responseJson, HttpStatus.BAD_REQUEST);
+        ResponseMessageVo errorVo = new ResponseMessageVo("failed JPA queried", 400);
+        return new ResponseEntity<>(errorVo, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping

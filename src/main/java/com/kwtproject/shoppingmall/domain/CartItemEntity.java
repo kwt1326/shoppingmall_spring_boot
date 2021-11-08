@@ -8,12 +8,15 @@ import javax.persistence.*;
 @Getter
 @Table(name = "cart_item")
 public class CartItemEntity extends EntityBase {
-
-    // 계산된 최종 가격 ( discount & quantity )
-    private int price;
-
-    // 할인액
-    private int discount;
+    public CartItemEntity(
+            short quantity,
+            ProductEntity productEntity,
+            CartEntity cartEntity
+    ) {
+        this.quantity = quantity;
+        this.product = productEntity;
+        this.cart = cartEntity;
+    }
 
     // 수량
     private short quantity;

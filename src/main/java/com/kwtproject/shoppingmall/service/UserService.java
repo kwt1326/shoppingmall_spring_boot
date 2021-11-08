@@ -7,6 +7,7 @@ import com.kwtproject.shoppingmall.security.domain.CustomUser;
 import com.kwtproject.shoppingmall.utils.authentication.JwtUtils;
 import com.kwtproject.shoppingmall.utils.authentication.ValidateUtils;
 
+import com.kwtproject.shoppingmall.utils.common.AuthUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,9 @@ public class UserService implements IUserService { // common + security service
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private AuthUtils authUtils;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> userEntity = repository.findByUserName(username);
@@ -45,7 +49,7 @@ public class UserService implements IUserService { // common + security service
     public String signUp(RequestSignUp requestSignUp, String role) throws Exception {
         try {
             /* 패스워드 유효성 검사 (8-16자 영/숫자/특수문자 1자 이상) */
-            if (new ValidateUtils().ValidatePassword(requestSignUp.getPassword()) == false) {
+            if (!new ValidateUtils().ValidatePassword(requestSignUp.getPassword())) {
                 throw new InvalidParameterException("invalid password");
             }
 
@@ -73,14 +77,7 @@ public class UserService implements IUserService { // common + security service
 
     @Override
     public Boolean checkLogging(WebRequest request) {
-        String token = request.getHeader("Authorization");
-        String username = jwtUtils.extractUsername(token);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String authorizedUsername = (String)authentication.getPrincipal();
-
-        return username.equals(authorizedUsername);
+        return authUtils.getLoggedUser(request) != null;
     }
 
     @Override

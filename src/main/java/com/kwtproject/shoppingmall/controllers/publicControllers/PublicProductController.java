@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.kwtproject.shoppingmall.domain.ProductEntity;
 import com.kwtproject.shoppingmall.dto.product.RequestProductList;
 import com.kwtproject.shoppingmall.service.ProductService;
+import com.kwtproject.shoppingmall.vo.product.ResponsePublicProductDetail;
 import com.kwtproject.shoppingmall.vo.product.ResponsePublicProductElement;
 import com.kwtproject.shoppingmall.vo.product.ResponsePublicProductList;
 
@@ -13,10 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +25,26 @@ import java.util.stream.Collectors;
 public class PublicProductController {
     @Autowired
     private ProductService service;
+
+    @GetMapping(value = "/{id}")
+    private ResponseEntity<?> getDetail(@PathVariable("id") String id) throws Exception {
+         ProductEntity entity = service.getProductDetail(Long.parseLong(id));
+
+         ResponsePublicProductDetail resultVo = new ResponsePublicProductDetail(
+                 entity.getName(),
+                 entity.getCategory(),
+                 entity.getStock(),
+                 entity.getPrice(),
+                 entity.getHeart(),
+                 entity.getDiscount(),
+                 entity.is_saleable(),
+                 entity.getProductImgSlug(),
+                 entity.getProductDetailImgSlug(),
+                 entity.getProductModelSlug()
+         );
+
+         return new ResponseEntity<>(resultVo, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     private ResponseEntity<?> getList(
@@ -54,6 +72,7 @@ public class PublicProductController {
                             entity.getPrice(),
                             entity.getDiscount(),
                             entity.getHeart(),
+                            entity.is_saleable(),
                             entity.getProductImgSlug()
                     )
             ).collect(Collectors.toList());

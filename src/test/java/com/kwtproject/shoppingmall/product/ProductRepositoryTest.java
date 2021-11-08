@@ -46,6 +46,7 @@ public class ProductRepositoryTest {
                 10,
                 true,
                 "",
+                "",
                 ""
         );
 
@@ -75,6 +76,7 @@ public class ProductRepositoryTest {
                     10,
                     true,
                     "",
+                    "",
                     ""
             );
 
@@ -102,6 +104,24 @@ public class ProductRepositoryTest {
         for (ProductEntity content : contents) {
             System.out.println(content.getName());
             System.out.println(content.getId());
+        }
+    }
+
+    @Test
+    @Order(3)
+    public void modify() throws Exception {
+        CreateTestEntity createUtil = new CreateTestEntity();
+
+        ProductEntity entity = createUtil.createProduct(repository, userRepository);
+
+        entity.setName("MODIFIED_PRODUCT");
+
+        repository.save(entity);
+
+        Optional<ProductEntity> modifiedEntity = repository.findById(entity.getId());
+
+        if (modifiedEntity.isPresent()) {
+            Assertions.assertEquals("MODIFIED_PRODUCT", modifiedEntity.get().getName());
         }
     }
 }

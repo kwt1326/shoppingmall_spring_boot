@@ -7,6 +7,8 @@ custom:
     secret: abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
     expireHour: 2
 
+debug: true
+
 spring:
   profiles:
     active: oracle
@@ -16,9 +18,11 @@ spring:
     password:
     driver-class-name: org.h2.Driver
     initialization-mode: always
-    data: classpath*:data-devtest.sql
+    platform: h2
   jpa:
-    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
       ddl-auto: create-drop
       jdbc:
@@ -32,10 +36,26 @@ spring:
   session:
     store-type: jdbc
   thymeleaf:
-    prefix: file:src/main/resources/templates/
+    prefix:
+     file: src/main/resources/templates/
     cache: false
   resources:
     static-locations: classpath:/static/
   devtools:
     livereload:
       enabled: true
+  output:
+    ansi:
+      enabled: always
+
+logging:
+    file:
+      name: springlog.log
+    level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type:
+            descriptor:
+              sql:
+                BasicBinder: TRACE

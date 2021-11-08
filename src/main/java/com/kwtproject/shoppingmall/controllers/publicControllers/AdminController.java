@@ -25,4 +25,7 @@ public class AdminController {
 
     @GetMapping("product/list")
     private String ProductListPage() { return "/products/list"; }
+
+    @GetMapping("product/{id}")
+    private String ProductDetailPage() { return "/products/edit"; }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface IProductService {
     Page<ProductEntity> getProductList(RequestProductList dto);
 
-    Optional<ProductEntity> getProductDetail(int id);
+    ProductEntity getProductDetail(Long id);
 
     ProductEntity addProduct(RequestAddProduct dto) throws Exception;
 

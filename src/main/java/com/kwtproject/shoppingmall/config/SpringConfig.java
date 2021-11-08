@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 @Configuration
 public class SpringConfig implements WebMvcConfigurer {
@@ -24,6 +25,7 @@ public class SpringConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("http://localhost:3000")
+                .exposedHeaders("Authorization", "Content-Disposition");
     }
 }

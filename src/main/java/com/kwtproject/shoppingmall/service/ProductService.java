@@ -67,9 +67,12 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Optional<ProductEntity> getProductDetail(int id) {
-
-        return Optional.empty();
+    public ProductEntity getProductDetail(Long id) {
+        Optional<ProductEntity> findIt = productRepository.findById(id);
+        if (findIt.isPresent()) {
+            return findIt.get();
+        }
+        return null;
     }
 
     @Override
@@ -100,19 +103,19 @@ public class ProductService implements IProductService {
     @Override
     public ProductEntity modifyProduct(RequestAddProduct dto, String id) {
         if (id != null) {
-            Optional<ProductEntity> optional = productRepository.findById(Long.getLong(id));
+            Optional<ProductEntity> optional = productRepository.findById(Long.parseLong(id));
 
             if (optional.isPresent()) {
                 ProductEntity entity = optional.get();
 
-                entity.setName(dto.getName());
+                entity.setName(dto.getName() != null ? dto.getName() : "");
                 entity.setCategory(dto.getCategory());
                 entity.setStock(dto.getStock());
                 entity.setPrice(dto.getPrice());
                 entity.setDiscount(dto.getDiscount());
-                entity.setProductImgSlug(dto.getProductImgSlug());
-                entity.setProductDetailImgSlug(dto.getProductDetailImgSlug());
-                entity.setProductModelSlug(dto.getProductImgSlug());
+                entity.setProductImgSlug(dto.getProductImgSlug() != null ? dto.getProductImgSlug() : "");
+                entity.setProductDetailImgSlug(dto.getProductDetailImgSlug() != null ? dto.getProductDetailImgSlug() : "");
+                entity.setProductModelSlug(dto.getProductModelSlug() != null ? dto.getProductModelSlug() : "");
                 entity.set_saleable(dto.isSaleable());
 
                 productRepository.save(entity);

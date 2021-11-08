@@ -53,6 +53,10 @@
                 <label for="input_model_slug" class="form-label">모델 뷰 전용 모델명</label>
                 <input id="input_model_slug" class="form-control" type="text">
             </div>
+            <div class="input_wrap">
+                <label for="input_detail_slug" class="form-label">상세 설명 이미지</label>
+                <input id="input_detail_slug" class="form-control" type="text">
+            </div>
         </div>
         <button id="submit_btn">등록</button>
     </div>
@@ -72,10 +76,11 @@
             const inputIsSaleableValue = document.getElementById('input_is_saleable').checked;
             const inputImgSlugValue = document.getElementById('input_img_slug').value;
             const inputModelSlugValue = document.getElementById('input_model_slug').value;
+            const inputDetailSlugValue = document.getElementById('input_detail_slug').value;
 
             callApi({
                 method: 'POST',
-                url: '/product/apply',
+                url: '/product',
                 body: {
                     name: inputNameValue,
                     category: selectValue,
@@ -85,6 +90,7 @@
                     isSaleable: inputIsSaleableValue,
                     productImgSlug: inputImgSlugValue,
                     productModelSlug: inputModelSlugValue,
+                    productDetailImgSlug: inputDetailSlugValue
                 }
             }, (response, status) => {
                 if (response && status === 200) {

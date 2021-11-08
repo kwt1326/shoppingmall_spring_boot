@@ -12,5 +12,6 @@ public class ResponsePublicProductElement {
     private int price;
     private float discount;
     private int heart;
+    private boolean isSaleable;
     private String img_src;
 }
