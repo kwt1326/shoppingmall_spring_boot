@@ -1,9 +1,9 @@
 package com.kwtproject.shoppingmall.dto.user;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-@Builder
+@Setter
 @Getter
 public class RequestSignUp {
     private String username;
@@ -11,4 +11,5 @@ public class RequestSignUp {
     private String password;
     private String email;
     private String contact;
+    private String role = "USER_COMMON";
 }

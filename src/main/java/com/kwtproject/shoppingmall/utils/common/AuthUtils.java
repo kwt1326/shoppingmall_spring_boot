@@ -36,7 +36,7 @@ public class AuthUtils {
         String authorizedUsername = (String)authentication.getPrincipal();
 
         if (username.equals(authorizedUsername)) {
-            Optional<UserEntity> entity = repository.findByName(username);
+            Optional<UserEntity> entity = repository.findByUserName(username);
             if (entity.isPresent()) {
                 return entity.get();
             }

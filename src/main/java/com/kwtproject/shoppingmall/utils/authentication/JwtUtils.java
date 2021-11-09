@@ -1,6 +1,7 @@
 package com.kwtproject.shoppingmall.utils.authentication;
 
 import com.kwtproject.shoppingmall.security.domain.CustomUser;
+import com.kwtproject.shoppingmall.service.UserService;
 import com.kwtproject.shoppingmall.utils.common.ConfigurationPropertiesProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
+    @Autowired
+    private UserService service;
 
     @Value("${custom.jwt.secret}")
     private String SECRET_KEY;

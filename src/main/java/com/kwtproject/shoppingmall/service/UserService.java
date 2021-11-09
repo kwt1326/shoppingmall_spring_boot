@@ -1,5 +1,6 @@
 package com.kwtproject.shoppingmall.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kwtproject.shoppingmall.domain.UserEntity;
 import com.kwtproject.shoppingmall.dto.user.RequestSignUp;
 import com.kwtproject.shoppingmall.repository.user.JpaUserRepository;
@@ -8,6 +9,7 @@ import com.kwtproject.shoppingmall.utils.authentication.JwtUtils;
 import com.kwtproject.shoppingmall.utils.authentication.ValidateUtils;
 
 import com.kwtproject.shoppingmall.utils.common.AuthUtils;
+import com.kwtproject.shoppingmall.vo.user.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,8 +48,9 @@ public class UserService implements IUserService { // common + security service
 
     /* 가입 (로그인 security 에 위임) */
     @Override
-    public String signUp(RequestSignUp requestSignUp, String role) throws Exception {
+    public String signUp(RequestSignUp requestSignUp) throws Exception {
         try {
+            System.out.println(requestSignUp.getRole());
             /* 패스워드 유효성 검사 (8-16자 영/숫자/특수문자 1자 이상) */
             if (!new ValidateUtils().ValidatePassword(requestSignUp.getPassword())) {
                 throw new InvalidParameterException("invalid password");
@@ -64,7 +67,7 @@ public class UserService implements IUserService { // common + security service
             user.setUsername(requestSignUp.getUsername());
             user.setUserContact(requestSignUp.getContact());
             user.setEmail(requestSignUp.getEmail());
-            user.setRole(role);
+            user.setRole(requestSignUp.getRole());
 
             repository.save(user);
 
@@ -73,6 +76,24 @@ public class UserService implements IUserService { // common + security service
         } catch (Exception e) {
             throw new Exception("Throw Interval Server Error : " + e.getMessage());
         }
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(WebRequest request) {
+        UserEntity entity = authUtils.getLoggedUser(request);
+
+        if (entity != null) {
+            UserInfoVo infoVo = new UserInfoVo(
+                    entity.getUsername(),
+                    entity.getName(),
+                    entity.getUserContact(),
+                    entity.getEmail(),
+                    entity.getRole(),
+                    entity.getId()
+            );
+            return infoVo;
+        }
+        return null;
     }
 
     @Override
@@ -89,4 +110,7 @@ public class UserService implements IUserService { // common + security service
     public Optional<UserEntity> findOne(Long userId) {
         return repository.findById(userId);
     }
+
+    @Override
+    public Optional<UserEntity> findOneByUserName(String username) { return repository.findByUserName(username); }
 }
